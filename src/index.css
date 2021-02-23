@@ -33,11 +33,16 @@ ol, ul {
 }
 
 .square.color-x {
-    color: blue;
+    color: #007bff;
 }
 
 .square.color-o {
-    color: green;
+    color: #28a745;
+}
+
+.square.square-win {
+    background-color: #20c997;
+    color: #fff;
 }
 
 .square:focus {
