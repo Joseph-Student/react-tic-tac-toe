@@ -6,7 +6,7 @@ import './index.css';
 function Square(props) {
     return (
         <button
-            className="square"
+            className={"square color-" + props.status}
             onClick={props.onClick}
         >
             {props.value}
@@ -16,10 +16,12 @@ function Square(props) {
 
 class Board extends React.Component {
     renderSquare(i) {
+        const value = this.props.squares[i];
         return (
             <Square
-                value={this.props.squares[i]}
+                value={value}
                 onClick={() => this.props.onClick(i)}
+                status={value === "X" ? "x": "o"}
             />
         );
     }
@@ -93,7 +95,12 @@ class Game extends React.Component {
             const desc = move ? 'Go to move #' + move : 'Go to game start';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button
+                        className={this.state.stepNumber === move ? "font-bold": ""}
+                        onClick={() => this.jumpTo(move)}
+                    >
+                        {desc}
+                    </button>
                 </li>
             )
         })

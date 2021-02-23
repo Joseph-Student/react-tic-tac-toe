@@ -32,6 +32,14 @@ ol, ul {
     width: 34px;
 }
 
+.square.color-x {
+    color: blue;
+}
+
+.square.color-o {
+    color: green;
+}
+
 .square:focus {
     outline: none;
 }
@@ -47,4 +55,8 @@ ol, ul {
 
 .game-info {
     margin-left: 20px;
+}
+
+.font-bold {
+    font-weight: bold;
 }
