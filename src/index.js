@@ -14,11 +14,24 @@ function Square(props) {
     );
 }
 
+function Switch(props) {
+    return (
+        <label htmlFor="idOrder">
+            <input
+                id="idOrder" type="checkbox" name="order"
+                aria-label="Ordenar movimientos descendentemente?" aria-required="false"
+                checked={props.value} onChange={props.onChange}/>
+            {"Ordenar movimientos descendentemente?"}
+        </label>
+    );
+}
+
 class Board extends React.Component {
     renderSquare(i) {
         const value = this.props.squares[i];
         return (
             <Square
+                key={i}
                 value={value}
                 onClick={() => this.props.onClick(i)}
                 status={value === "X" ? "x": "o"}
@@ -34,7 +47,7 @@ class Board extends React.Component {
             for (let j = k; j < k + 3; j++) {
                 columns.push(this.renderSquare(j));
             }
-            rows.push(<div className="board-row">{columns}</div>)
+            rows.push(<div key={i} className="board-row">{columns}</div>)
             k += 3;
         }
         return <div className="board">{rows}</div>;
@@ -49,7 +62,8 @@ class Game extends React.Component {
                 squares: Array(9).fill(null)
             }],
             xIsNext: true,
-            stepNumber: 0
+            stepNumber: 0,
+            orderAsc: true,
         }
     }
 
@@ -78,12 +92,22 @@ class Game extends React.Component {
         })
     }
 
+    handlerOrderChange() {
+        this.setState({
+            orderAsc: !this.state.orderAsc,
+        })
+    }
+
     render() {
-        const history = this.state.history;
+        const history = this.state.history.slice();
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
+            const  length = history.length - 1;
+            if (!this.state.orderAsc) {
+                move = length - move;
+            }
             const desc = move ? 'Go to move #' + move : 'Go to game start';
             return (
                 <li key={move}>
@@ -113,6 +137,9 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
+                    <div>
+                        <Switch value={!this.state.orderAsc} onChange={() => {this.handlerOrderChange()}} />
+                    </div>
                     <ol>{moves}</ol>
                 </div>
             </div>
