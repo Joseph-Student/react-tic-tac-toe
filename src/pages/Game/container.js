@@ -14,6 +14,9 @@ class Game extends React.Component {
             stepNumber: 0,
             orderAsc: true,
         }
+
+        this.handlerClick = this.handlerClick.bind(this);
+        this.handlerOrderChange = this.handlerOrderChange.bind(this);
     }
 
     handlerClick(i) {
@@ -85,14 +88,14 @@ class Game extends React.Component {
                 <div className="game-board">
                     <Board
                         squares={current.squares}
-                        onClick={(i) => this.handlerClick(i)}
+                        onClick={this.handlerClick}
                         winLine={lines}
                     />
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
                     <div>
-                        <Switch value={!this.state.orderAsc} onChange={() => {this.handlerOrderChange()}} />
+                        <Switch value={!this.state.orderAsc} onChange={this.handlerOrderChange} />
                     </div>
                     <ol>{moves}</ol>
                 </div>
