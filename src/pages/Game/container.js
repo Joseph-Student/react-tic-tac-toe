@@ -1,9 +1,9 @@
 import React from 'react';
 import Board from '../../components/Board';
 import Switch from '../../components/Switch';
-import calculateWinner from '../../utils';
+import { calculateWinner } from '../../utils';
 
-class Game extends React.Component {
+class Game extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
