@@ -1,5 +1,5 @@
 function Square(props) {
-    const className = "square color-" + props.status + (props.win ? " square-win": "")
+    const className = "square color-" + props.status + (props.win ? " square-win" : "")
     return (
         <button
             className={className}

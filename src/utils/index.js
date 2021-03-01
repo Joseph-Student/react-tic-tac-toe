@@ -23,4 +23,4 @@ function onRenderProfiler(id, phase, actualDuration, baseDuration,
     console.log(id, phase, actualDuration, baseDuration, startTime, commitTime, interactions);
 }
 
-export { calculateWinner, onRenderProfiler };
+export {calculateWinner, onRenderProfiler};
