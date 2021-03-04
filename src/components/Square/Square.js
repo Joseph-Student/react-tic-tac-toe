@@ -1,11 +1,11 @@
-function Square(props) {
-    const className = "square color-" + props.status + (props.win ? " square-win" : "")
+function Square({status, win, onClick, value}) {
+    const className = "square color-" + status + (win ? " square-win" : "")
     return (
         <button
             className={className}
-            onClick={props.onClick}
+            onClick={onClick}
         >
-            {props.value}
+            {value}
         </button>
     );
 }

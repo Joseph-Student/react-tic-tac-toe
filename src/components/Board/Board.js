@@ -2,16 +2,16 @@ import React from 'react';
 import Square from '../Square';
 
 
-function Board(props) {
+function Board({squares, winLine, onClick}) {
     const renderSquare = (i) => {
-        const value = props.squares[i];
+        const value = squares[i];
         return (
             <Square
                 key={i}
                 value={value}
-                onClick={() => props.onClick(i)}
+                onClick={() => onClick(i)}
                 status={value === "X" ? "x" : "o"}
-                win={props.winLine ? props.winLine.includes(i) : false}
+                win={winLine ? winLine.includes(i) : false}
             />
         )
     }

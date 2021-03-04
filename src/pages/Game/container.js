@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import Board from '../../components/Board';
 import Switch from '../../components/Switch';
 import {calculateWinner} from '../../utils';
+import History from "../../components/History";
 
 
 function Game(props) {
@@ -10,12 +11,12 @@ function Game(props) {
     const [stepNumber, setStepNumber] = useState(0);
     const [orderAsc, setOrderAsc] = useState(true);
 
-    const jumpTo = (step) => {
+    const jumpTo = useCallback((step) => {
         setStepNumber(step);
         setXIsNext((step % 2) === 0);
-    }
+    }, []);
 
-    const handlerClick = (i) => {
+    const handlerClick = useCallback((i) => {
         const historyCopy = history.slice(0, stepNumber + 1);
         const current = historyCopy[historyCopy.length - 1];
         const squares = current.squares.slice();
@@ -27,38 +28,19 @@ function Game(props) {
         setHistory(historyCopy.concat([{squares}]));
         setXIsNext(prevXIsNext => !prevXIsNext);
         setStepNumber(historyCopy.length);
-    }
-    const handlerOrderChange = () => {
+    }, [history, stepNumber]);
+    const handlerOrderChange = useCallback(() => {
         setOrderAsc(prevOrderAsc => !prevOrderAsc);
-    }
+    }, []);
 
-    const historyCopy = history.slice();
-    const current = historyCopy[stepNumber];
+    const current = history[stepNumber];
     const [winner, lines] = calculateWinner(current.squares);
-
-    const moves = historyCopy.map((step, move) => {
-        const length = historyCopy.length - 1;
-        if (!orderAsc) {
-            move = length - move;
-        }
-        const desc = move ? 'Go to move #' + move : 'Go to game start';
-        return (
-            <li key={move}>
-                <button
-                    className={stepNumber === move ? "font-bold" : ""}
-                    onClick={() => jumpTo(move)}
-                >
-                    {desc}
-                </button>
-            </li>
-        )
-    })
 
     let status;
     if (winner) {
         status = 'Winner: ' + winner;
     } else {
-        if (historyCopy.length === 10) {
+        if (history.length === 10) {
             status = 'Juego empatado.'
         } else {
             status = 'Next player: ' + (xIsNext ? 'X' : 'O');
@@ -67,18 +49,32 @@ function Game(props) {
     return (
         <div className="game">
             <div className="game-board">
-                <Board
-                    squares={current.squares}
-                    onClick={handlerClick}
-                    winLine={lines}
-                />
+                {useMemo(() => (
+                    <Board
+                        squares={current.squares}
+                        onClick={handlerClick}
+                        winLine={lines}
+                    />
+                ), [current.squares, lines])}
             </div>
             <div className="game-info">
                 <div>{status}</div>
                 <div>
-                    <Switch value={!orderAsc} onChange={handlerOrderChange}/>
+                    {useMemo(() => (
+                        <Switch
+                            value={!orderAsc}
+                            onChange={handlerOrderChange}/>
+                        ),
+                        [orderAsc, handlerOrderChange])}
                 </div>
-                <ol>{moves}</ol>
+                <ol>
+                    <History
+                        history={history}
+                        orderAsc={orderAsc}
+                        stepNumber={stepNumber}
+                        onClick={jumpTo}
+                    />
+                </ol>
             </div>
         </div>
     );
